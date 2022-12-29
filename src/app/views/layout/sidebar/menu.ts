@@ -352,11 +352,12 @@ export const MENU_ADMIN_RTF: MenuItem[] = [
   {
     label: 'Registrar',
     icon: 'plus',
+    link: '/equipos/nuevo',
   },
   {
     label: 'Gestionar',
     icon: 'search',
-    link: '/apps/chat',
+    link: '/equipos/gestionar',
   },
 
   {
@@ -366,11 +367,12 @@ export const MENU_ADMIN_RTF: MenuItem[] = [
   {
     label: 'Registrar',
     icon: 'plus',
+    link: '/casos/nuevo',
   },
   {
     label: 'Gestionar',
     icon: 'search',
-    link: '/apps/chat',
+    link: '/casos/gestionar',
   },
   {
     label: 'Personal/Usuarios',
@@ -379,10 +381,11 @@ export const MENU_ADMIN_RTF: MenuItem[] = [
   {
     label: 'Registrar',
     icon: 'plus',
+    link: '/tecnicos/nuevo',
   },
   {
     label: 'Gestionar',
     icon: 'search',
-    link: '/apps/chat',
+    link: '/tecnicos/gestionar',
   },
 ];

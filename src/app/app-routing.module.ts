@@ -80,6 +80,25 @@ const routes: Routes = [
             (m) => m.GeneralModule
           ),
       },
+      {
+        path: 'equipos',
+        loadChildren: () =>
+          import('./views/pages/equipos/equipos.module').then(
+            (m) => m.EquiposModule
+          ),
+      },
+      {
+        path: 'casos',
+        loadChildren: () =>
+          import('./views/pages/casos/casos.module').then((m) => m.CasosModule),
+      },
+      {
+        path: 'tecnicos',
+        loadChildren: () =>
+          import('./views/pages/tecnicos/tecnicos.module').then(
+            (m) => m.TecnicosModule
+          ),
+      },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       // { path: '**', redirectTo: 'dashboard', pathMatch: 'full' }
     ],
@@ -102,6 +121,7 @@ const routes: Routes = [
     loadChildren: () =>
       import('./admin-rtf/admin-rtf.module').then((m) => m.AdminRtfModule),
   },
+
   { path: '**', redirectTo: 'error', pathMatch: 'full' },
 ];
 
