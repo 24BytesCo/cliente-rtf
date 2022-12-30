@@ -14,14 +14,18 @@
             <form class="forms-sample">
               <div class="mb-3">
                 <label for="exampleInputEmail1" class="form-label">Usuario</label>
-                <input name="exampleInputPassword2" required [(ngModel)]="usuario" type="text" class="form-control"
-                  placeholder="Usuario">
+                <input name="exampleInputPassword2" required [(ngModel)]="usuario" #field="ngModel" type="text"
+                  class="form-control" placeholder="Usuario">
+                <p class="text-danger mt-1" *ngIf="field?.errors?.required">Usuario requerido</p>
 
               </div>
               <div class="mb-3">
                 <label for="exampleInputPassword1" class="form-label">Contraseña</label>
-                <input type="password" [(ngModel)]="contrasena" class="form-control" name="exampleInputPassword1"
-                  autocomplete="current-password" placeholder="Contraseña">
+                <input type="password" [(ngModel)]="contrasena" required class="form-control"
+                  name="exampleInputPassword1" autocomplete="current-password" #fieldContra="ngModel"
+                  placeholder="Contraseña">
+                <p class="text-danger mt-1" *ngIf="fieldContra?.errors?.required">Contraseña requerida</p>
+
               </div>
 
               <div>

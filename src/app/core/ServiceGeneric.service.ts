@@ -9,7 +9,7 @@ import {
 } from '../views/pages/auth/login/model/Login';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UsuarioToken } from './GenericaInterfaz';
+import { UsuarioToken, TipoEquipo } from './GenericaInterfaz';
 @Injectable({
   providedIn: 'root',
 })
@@ -121,6 +121,28 @@ export class ServiceGenericService {
       objJson.segundoApellido;
 
     return nombreCompleto.replace('  ', ' ');
+  }
+
+  listandoTiposEquipos() {
+    const token = localStorage.getItem(environment.token);
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .get<RespuestaGeneral<TipoEquipo[]>>(
+        `${environment.urlApi}tipo-equipo`,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
   }
 
   consultandoTodosDatosUsuarioLocales() {

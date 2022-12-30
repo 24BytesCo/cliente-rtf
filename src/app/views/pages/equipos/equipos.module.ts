@@ -6,6 +6,8 @@ import { EquiposComponent } from './equipos.component';
 import { GestionarComponent } from './gestionar/gestionar.component';
 import { NuevoComponent } from './nuevo/nuevo.component';
 import { Routes, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 const routes: Routes = [
   {
@@ -30,6 +32,12 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [EquiposComponent, GestionarComponent, NuevoComponent],
-  imports: [CommonModule, EquiposRoutingModule, RouterModule.forChild(routes)],
+  imports: [
+    CommonModule,
+    FormsModule,
+    NgSelectModule,
+    EquiposRoutingModule,
+    RouterModule.forChild(routes),
+  ],
 })
 export class EquiposModule {}

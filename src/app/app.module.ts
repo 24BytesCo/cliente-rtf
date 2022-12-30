@@ -11,6 +11,8 @@ import { ErrorPageComponent } from './views/pages/error-page/error-page.componen
 
 import { HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { HttpClientModule } from '@angular/common/http';
+import { FormsModule } from '@angular/forms';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 @NgModule({
   declarations: [AppComponent, ErrorPageComponent],
@@ -20,6 +22,8 @@ import { HttpClientModule } from '@angular/common/http';
     BrowserAnimationsModule,
     LayoutModule,
     HttpClientModule,
+    NgSelectModule,
+    FormsModule,
   ],
   providers: [
     AuthGuard,

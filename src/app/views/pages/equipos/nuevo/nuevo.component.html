@@ -1,1 +1,33 @@
-<p>nuevo works!</p>
+<form novalidate>
+  <div class="row">
+    <div class="col-lg-1"></div>
+    <div class="col-lg-10 grid-margin stretch-card">
+      <div class="card">
+        <h4 class="text-center mt-5">Registrando Nuevo Equipo</h4>
+
+        <div class="card-body">
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label">Nombre Equipo</label>
+            <input class="form-control" [(ngModel)]="equipo.nombre" [ngModelOptions]="{standalone: true}" type="text"
+              placeholder="Nombre Equipo" name="nombreEquipo" #requried="ngModel" required />
+            <p class="text-danger mt-1" *ngIf="requried?.errors?.required">
+              Nombre equipo requerido
+            </p>
+          </div>
+
+
+          <div class="mb-3">
+            <label for="exampleInputUsername1" class="form-label">Tipo Equipo</label>
+            <ng-select (change)="prueba($event)" [items]="listaTipoEquipo" name="tipoEquipo" bindLabel="descripcion"
+              bindValue="id" [searchable]="false" [(ngModel)]="equipo.tipoEquipo">
+            </ng-select>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+    <div class="col-lg-1"></div>
+  </div>
+</form>
