@@ -9,7 +9,7 @@ import {
 } from '../views/pages/auth/login/model/Login';
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { UsuarioToken, TipoEquipo } from './GenericaInterfaz';
+import { UsuarioToken, TipoEquipo, CategoriaEquipo, Equipo } from './GenericaInterfaz';
 @Injectable({
   providedIn: 'root',
 })
@@ -134,6 +134,71 @@ export class ServiceGenericService {
     return this.http
       .get<RespuestaGeneral<TipoEquipo[]>>(
         `${environment.urlApi}tipo-equipo`,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+  listandoEquiposPrincipalesActivos() {
+    const token = localStorage.getItem(environment.token);
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .get<RespuestaGeneral<TipoEquipo[]>>(
+        `${environment.urlApi}equipo/principales`,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+  creandoNuevoEquipo(body: Equipo) {
+    const token = localStorage.getItem(environment.token);
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .post<RespuestaGeneral<TipoEquipo[]>>(
+        `${environment.urlApi}equipo`, body,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+  listandoCategoriaEquipo() {
+    const token = localStorage.getItem(environment.token);
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .get<RespuestaGeneral<CategoriaEquipo[]>>(
+        `${environment.urlApi}categoria-equipo`,
         httpOptions
       )
       .pipe(

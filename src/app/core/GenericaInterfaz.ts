@@ -14,6 +14,7 @@ export interface UsuarioToken {
 export class Equipo {
   id: string;
   categoria: string;
+  equipoPrincipal: string;
   nombre: string;
   marca: string;
   noSerie: string;
@@ -31,6 +32,7 @@ export class Equipo {
     this.nombre = '';
     this.marca = '';
     this.noSerie = '';
+    this.equipoPrincipal = '';
     this.descripcion = '';
     this.fechaRegistro = new Date();
     this.fechaAdquisicionEmpresa = new Date();
@@ -45,4 +47,11 @@ export class TipoEquipo {
   id: string;
   descripcion: string;
   codigo: string;
+}
+
+export class CategoriaEquipo {
+  id: string;
+  descripcion: string;
+  codigo: string;
+  estado: BigInteger;
 }
