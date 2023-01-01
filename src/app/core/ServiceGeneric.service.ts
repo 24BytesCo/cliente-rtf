@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { catchError, map, retry, throwError } from 'rxjs';
 import Swal from 'sweetalert2';
-import * as router from '@angular/router';
+import { Router } from '@angular/router';
 
 import {
   RespuestaLogin,
@@ -14,7 +14,7 @@ import { UsuarioToken, TipoEquipo, CategoriaEquipo, Equipo } from './GenericaInt
   providedIn: 'root',
 })
 export class ServiceGenericService {
-  constructor(private http: HttpClient, private router: router.Router) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   alertaSuperiorDerechaPequena(mensaje: string, tipo: string) {
     const Toast = Swal.mixin({
@@ -99,6 +99,32 @@ export class ServiceGenericService {
         retry(0),
         catchError(this.handleError),
         map((response: any) => {
+
+
+          if (new Date().getTime() > new Date(response.body.ex).getTime() ) {
+            const Toast = Swal.mixin({
+              toast: true,
+              position: 'top-end',
+              showConfirmButton: false,
+              timer: 3000,
+              timerProgressBar: true,
+              didOpen: (toast) => {
+                toast.addEventListener('mouseenter', Swal.stopTimer);
+                toast.addEventListener('mouseleave', Swal.resumeTimer);
+              },
+            });
+
+            Toast.fire({
+              icon: 'error',
+              title: '¡El token ha expirado...!',
+            });
+            localStorage.clear();
+            this.router.navigate(['auth/login']);
+
+          }
+
+
+
           return response;
         })
       );
@@ -144,6 +170,7 @@ export class ServiceGenericService {
         })
       );
   }
+
   listandoEquiposPrincipalesActivos() {
     const token = localStorage.getItem(environment.token);
     var httpOptions = {
@@ -238,6 +265,34 @@ export class ServiceGenericService {
       icon: 'error',
       title: mensaje,
     });
+
+    return throwError(error.error);
+  }
+
+  private handleErrorCerrandoSesion(error: any) {
+    console.error('error ', error.error);
+    this.router.navigate(['/auth/login']);
+
+    console.log('error.error.body', error.error.body);
+
+    const mensaje: string = error.error.body;
+    const Toast = Swal.mixin({
+      toast: true,
+      position: 'top-end',
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener('mouseenter', Swal.stopTimer);
+        toast.addEventListener('mouseleave', Swal.resumeTimer);
+      },
+    });
+
+    Toast.fire({
+      icon: 'error',
+      title: mensaje,
+    });
+
 
     return throwError(error.error);
   }

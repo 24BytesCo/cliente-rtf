@@ -4,7 +4,8 @@ import { UsuarioToken } from 'src/app/core/GenericaInterfaz';
 import { environment } from 'src/environments/environment.prod';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ServiceGenericService } from 'src/app/core/ServiceGeneric.service';
-import * as router from '@angular/router';
+import { Router } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-tablero-admin-rtf',
@@ -49,7 +50,7 @@ export class TableroAdminRtfComponent implements OnInit {
   constructor(
     private calendar: NgbCalendar,
     private genericService: ServiceGenericService,
-    private router: router.Router
+    private router: Router
   ) {
     //verificando si tiene token
     var tokenLocal = localStorage.getItem(environment.token);
@@ -61,7 +62,9 @@ export class TableroAdminRtfComponent implements OnInit {
     this.genericService
       .validandoTokenObteniendoValores(tokenLocal || '')
       .subscribe((res: RespuestaGeneral<UsuarioToken>) => {
+
         this.tUsuario = res.body.tUsuario;
+
       });
 
     this.nombreCompleto = this.genericService.armandoNombreCompleto();

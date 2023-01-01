@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { NgbDateStruct, NgbCalendar } from '@ng-bootstrap/ng-bootstrap';
 import { ServiceGenericService } from 'src/app/core/ServiceGeneric.service';
 import { environment } from 'src/environments/environment.prod';
-import * as router from '@angular/router';
+import { Router } from '@angular/router';
 import { RespuestaGeneral } from '../auth/login/model/Login';
 import { UsuarioToken } from '../../../core/GenericaInterfaz';
 
@@ -51,18 +51,20 @@ export class DashboardComponent implements OnInit {
   constructor(
     private calendar: NgbCalendar,
     private genericService: ServiceGenericService,
-    private router: router.Router
+    private router: Router
   ) {
     //verificando si tiene token
     var tokenLocal = localStorage.getItem(environment.token);
     console.log('tokenLocal', tokenLocal);
     if (!tokenLocal) {
-      this.router.navigate(['auth/login']);
+      this.router.navigate(['/auth/login']);
     }
 
     this.genericService
       .validandoTokenObteniendoValores(tokenLocal || '')
       .subscribe((res: RespuestaGeneral<UsuarioToken>) => {
+console.log("res", res);
+
         this.tUsuario = res.body.tUsuario;
       });
   }
