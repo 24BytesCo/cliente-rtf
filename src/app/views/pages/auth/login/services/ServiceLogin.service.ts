@@ -47,10 +47,19 @@ export class ServiceLoginService {
       },
     });
 
-    Toast.fire({
-      icon: 'error',
-      title: mensaje,
-    });
+    if (mensaje)
+{
+  Toast.fire({
+    icon: 'error',
+    title: mensaje,
+  });
+}else{
+  Toast.fire({
+    icon: 'error',
+    title: "Error de conección con el servidor.",
+  });
+}
+
 
     return throwError(error.error);
   }

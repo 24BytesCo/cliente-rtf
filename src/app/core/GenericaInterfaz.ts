@@ -20,7 +20,7 @@ export class Equipo {
   noSerie: string;
   descripcion: string;
   fechaRegistro: Date;
-  fechaAdquisicionEmpresa: Date;
+  fechaAdquisionEmpresa: Date;
   imagenArrayUrl: Array<string>;
   modelo: string;
   codigo: string;
@@ -35,12 +35,46 @@ export class Equipo {
     this.equipoPrincipal = '';
     this.descripcion = '';
     this.fechaRegistro = new Date();
-    this.fechaAdquisicionEmpresa = new Date();
+    this.fechaAdquisionEmpresa = new Date();
     this.imagenArrayUrl = [''];
     this.modelo = '';
     this.codigo = '';
     this.tipoEquipo = '';
   }
+}
+
+class Categoria{
+codigo: string;
+descripcion: string;
+}
+
+class TipoEquipoInt{
+  codigo: string;
+  descripcion: string;
+  }
+
+  class EquipoPrincipal{
+    id: string;
+    codigo: string;
+    nombre: string;
+    }
+export class EquipoInner {
+  id: string;
+  categoria: Categoria;
+  equipoPrincipal:EquipoPrincipal ;
+  nombre: string;
+  imagenPrincipal: string;
+  marca: string;
+  noSerie: string;
+  descripcion: string;
+  fechaRegistro: Date;
+  fechaAdquisionEmpresa: Date;
+  imagenArrayUrl: Array<string>;
+  modelo: string;
+  codigo: string;
+  tipoEquipo: TipoEquipoInt;
+
+
 }
 
 export class TipoEquipo {

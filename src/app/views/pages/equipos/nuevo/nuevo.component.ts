@@ -25,15 +25,13 @@ export class NuevoComponent implements OnInit {
     cancelReset: null
   };
 
-
-
   equipo: Equipo = {
     nombre: '',
     categoria: '',
     codigo: '',
     equipoPrincipal: '',
     descripcion: '',
-    fechaAdquisicionEmpresa: new Date(),
+    fechaAdquisionEmpresa: new Date(),
     fechaRegistro: new Date(),
     id: '',
     imagenArrayUrl: [''],
@@ -42,6 +40,7 @@ export class NuevoComponent implements OnInit {
     noSerie: '',
     tipoEquipo: '',
   };
+  tipoEquipo:any = null;
   listaTipoEquipo: TipoEquipo[];
   listaCategoriaEquipo: CategoriaEquipo[];
   listaEquiposPrincipalesActivos: Equipo[];
@@ -49,27 +48,36 @@ export class NuevoComponent implements OnInit {
   verSeleccionarPadre: boolean = false;
 
   constructor(private genericoServicio: ServiceGenericService) {
-    this.genericoServicio
-      .listandoTiposEquipos()
-      .subscribe((res: RespuestaGeneral<TipoEquipo[]>) => {
-        this.listaTipoEquipo = res.body;
-      });
 
     this.genericoServicio
-      .listandoCategoriaEquipo()
-      .subscribe((res: RespuestaGeneral<CategoriaEquipo[]>) => {
-        this.listaCategoriaEquipo = res.body;
+    .listandoCategoriaEquipo()
+    .subscribe((res: RespuestaGeneral<CategoriaEquipo[]>) => {
+      this.listaCategoriaEquipo = res.body;
+
+    });
+
+
+    this.genericoServicio
+    .listandoTiposEquipos()
+    .subscribe((res: RespuestaGeneral<TipoEquipo[]>) => {
+      this.listaTipoEquipo = res.body;
+
+    });
+
+
+    this.genericoServicio
+     .listandoEquiposPrincipalesActivos().subscribe((res: RespuestaGeneral<Equipo[]>)=>
+      {
+        this.listaEquiposPrincipalesActivos = res.body;
+
       });
 
-      this.genericoServicio
-       .listandoEquiposPrincipalesActivos().subscribe((res: RespuestaGeneral<Equipo[]>)=>
-        {
-          this.listaEquiposPrincipalesActivos = res.body;
-
-        });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+
+    }
 
   prueba(e: any) {
     console.log('cambio en tipo', this.equipo.tipoEquipo);
@@ -87,6 +95,7 @@ export class NuevoComponent implements OnInit {
 
   guardar(){
     console.log("equipo", this.equipo);
+    this.genericoServicio.alertaTimer("Creando Equipo");
 
     this.genericoServicio.creandoNuevoEquipo(this.equipo).subscribe(res=>{
       this.equipo= {
@@ -95,7 +104,7 @@ export class NuevoComponent implements OnInit {
         codigo: '',
         equipoPrincipal: '',
         descripcion: '',
-        fechaAdquisicionEmpresa: new Date(),
+        fechaAdquisionEmpresa: new Date(),
         fechaRegistro: new Date(),
         id: '',
         imagenArrayUrl: [''],
@@ -105,6 +114,9 @@ export class NuevoComponent implements OnInit {
         tipoEquipo: '',
       };
       console.log("res guardar", res);
+      if (!res.error) {
+        this.genericoServicio.alertaSuperiorDerechaPequena("¡Se ha creado el equipo corréctavmente!", "success");
+      }
 
     });
 

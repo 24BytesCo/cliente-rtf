@@ -13,6 +13,7 @@ import { HIGHLIGHT_OPTIONS } from 'ngx-highlightjs';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { HashLocationStrategy, LocationStrategy } from '@angular/common';
 
 @NgModule({
   declarations: [AppComponent, ErrorPageComponent],
@@ -26,6 +27,7 @@ import { NgSelectModule } from '@ng-select/ng-select';
     FormsModule,
   ],
   providers: [
+    {provide: LocationStrategy, useClass: HashLocationStrategy},
     AuthGuard,
     {
       provide: HIGHLIGHT_OPTIONS, // https://www.npmjs.com/package/ngx-highlightjs

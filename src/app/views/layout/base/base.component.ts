@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, RouteConfigLoadStart, RouteConfigLoadEnd } from '@angular/router';
+import { LoaderService } from '../../../core/loader.service';
 
 @Component({
   selector: 'app-base',
@@ -8,20 +9,21 @@ import { Router, RouteConfigLoadStart, RouteConfigLoadEnd } from '@angular/route
 })
 export class BaseComponent implements OnInit {
 
-  isLoading: boolean;
+  isLoading: boolean = false;
 
-  constructor(private router: Router) { 
+  constructor(private router: Router, private loadinService: LoaderService) {
+    this.loadinService.loading$.subscribe(
 
-    // Spinner for lazyload modules
-    router.events.forEach((event) => { 
-      if (event instanceof RouteConfigLoadStart) {
-        this.isLoading = true;
-      } else if (event instanceof RouteConfigLoadEnd) {
-        this.isLoading = false;
+      r=>{
+        console.log("r => ", r);
+
+        this.isLoading = r;
       }
-    });
+    );
 
-    
+
+
+
   }
 
   ngOnInit(): void {

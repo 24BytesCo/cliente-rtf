@@ -57,7 +57,7 @@ export class DashboardComponent implements OnInit {
     var tokenLocal = localStorage.getItem(environment.token);
     console.log('tokenLocal', tokenLocal);
     if (!tokenLocal) {
-      this.router.navigate(['/auth/login']);
+      this.router.navigate(['auth/login']);
     }
 
     this.genericService

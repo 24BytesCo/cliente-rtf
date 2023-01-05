@@ -4,8 +4,9 @@ import { UsuarioToken } from 'src/app/core/GenericaInterfaz';
 import { environment } from 'src/environments/environment.prod';
 import { NgbCalendar, NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
 import { ServiceGenericService } from 'src/app/core/ServiceGeneric.service';
-import { Router } from '@angular/router';
+import { RouteConfigLoadEnd, RouteConfigLoadStart, Router } from '@angular/router';
 import { HttpErrorResponse } from '@angular/common/http';
+import { LoaderService } from 'src/app/core/loader.service';
 
 @Component({
   selector: 'app-tablero-admin-rtf',
@@ -47,11 +48,15 @@ export class TableroAdminRtfComponent implements OnInit {
 
   tUsuario: string;
   nombreCompleto: string;
+  isLoading: any;
   constructor(
     private calendar: NgbCalendar,
     private genericService: ServiceGenericService,
-    private router: Router
+    private router: Router,
+    private loader: LoaderService
   ) {
+
+
     //verificando si tiene token
     var tokenLocal = localStorage.getItem(environment.token);
     console.log('tokenLocal', tokenLocal);
@@ -68,6 +73,8 @@ export class TableroAdminRtfComponent implements OnInit {
       });
 
     this.nombreCompleto = this.genericService.armandoNombreCompleto();
+            // Spinner for lazyload modules
+
   }
 
   ngOnInit(): void {

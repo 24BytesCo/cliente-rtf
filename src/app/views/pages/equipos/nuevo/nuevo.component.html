@@ -17,7 +17,7 @@
                       *ngIf="requried?.errors?.required">
                       *
                     </span></label>
-                  <input class="form-control" [(ngModel)]="equipo.nombre" [ngModelOptions]="{standalone: true}"
+                  <input class="form-control" [(ngModel)]="equipo.nombre"
                     type="text" placeholder="Nombre Equipo" name="nombreEquipo" #requried="ngModel" required />
 
                 </div>
@@ -25,13 +25,13 @@
                 <!-- Tipo Equipo -->
                 <div class="col-md-12 mb-3">
                   <label for="exampleInputUsername1" class="form-label">Tipo Equipo
-                    <span class="text-danger mt-1" *ngIf="!equipo.tipoEquipo">
+                    <span class="text-danger mt-1" *ngIf="!tipoEquipo">
                       *
                     </span>
                   </label>
-                  <ng-select (change)="prueba($event)" #requriedTipo="ngModel" [items]="listaTipoEquipo"
+                  <ng-select (change)="prueba($event)" #requriedTipo="ngModel"  [items]="listaTipoEquipo"
                     name="tipoEquipo" bindLabel="descripcion" bindValue="id" [searchable]="false"
-                    [(ngModel)]="equipo.tipoEquipo">
+                    [(ngModel)]="tipoEquipo">
                   </ng-select>
 
                 </div>
@@ -172,7 +172,7 @@
               <!-- Fecha Compra Empresa -->
               <div class="col-md-4">
                 <label class="form-label">Fecha Aquisición Empresa:</label>
-                <input [(ngModel)]="equipo.fechaAdquisicionEmpresa" name = "fechaAdquisicionEmpresa" class="form-control mb-4 mb-md-0" mask="d0/M0/0000"
+                <input [(ngModel)]="equipo.fechaAdquisionEmpresa" name = "fechaAdquisionEmpresa" class="form-control mb-4 mb-md-0" mask="d0/M0/0000"
                   placeholder="dd/mm/yyyy" />
               </div>
 
