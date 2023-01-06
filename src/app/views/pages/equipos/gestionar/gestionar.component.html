@@ -1,36 +1,120 @@
-<div class="row">
-  <div class="col-md-12 stretch-card">
-    <div class="card">
-      <div class="card-body">
-        <h6 class="card-title">Gestionar Equipos</h6>
-        <div class="table-responsive" style="zoom: 90%;">
-          <table id="dataTableExample" class="table">
-            <thead>
-              <tr>
-                <th>Img Principal</th>
-                <th>Nombre</th>
-                <th>Código</th>
-                <th>Tipo Equipo</th>
-                <th>Categoría</th>
-                <th>Equipo Superior</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
+<div class="animate__animated animate__fadeIn">
+  <div class="row mb-5 ">
+    <div class="col-md-12 stretch-card">
+      <div class="card">
+        <div class="card-body">
 
-
-            <tfoot>
-              <tr>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th></th>
-              </tr>
-            </tfoot>
-          </table>
+          <input type="text" #nombreBusqueda (keyup)="busquedaNombre(nombreBusqueda.value)" class="form-control" placeholder="Buscar equipo ...">
         </div>
       </div>
     </div>
   </div>
+
+
+
+  <div class="row mt-5" class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Equipos registrados ({{ totalEquipos }}) </h6>
+          <div class="row" *ngIf="mostrarLoader">
+            <div class="col-md-12">
+
+              <div class="spinner-wrapper">
+
+                <div class="spinner"></div>
+              </div>
+
+
+
+            </div>
+          </div>
+          <div class="table-responsive pt-3 animate__animated animate__fadeIn" *ngIf="!mostrarLoader">
+            <table class="table table-bordered table-responsive">
+              <thead>
+                <tr>
+                  <th>Imagen Principal</th>
+                  <th>Marca</th>
+                  <th>Nombre</th>
+                  <th>Código</th>
+                  <th>Categoria</th>
+                  <th>Equipo Principal</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr *ngFor=" let equipo of listaEquiposInner">
+                  <td class="text-center">
+
+                    <img *ngIf="equipo.imagenPrincipal" style="width: 70px;" [src]="equipo.imagenPrincipal" alt=""
+                      srcset="">
+                    <img *ngIf="!equipo.imagenPrincipal" src="../../../../../assets/images/others/noImagen.png" alt=""
+                      srcset="">
+
+                  </td>
+                  <td>{{equipo.marca}}</td>
+
+                  <td>{{equipo.nombre | slice: 0: 40 }}</td>
+                  <td>
+                    {{equipo.codigo}}
+                  </td>
+                  <td>{{equipo.categoria.descripcion}}</td>
+                  <td>{{equipo.equipoPrincipal.nombre ? equipo.equipoPrincipal.nombre: "N/A"}}</td>
+                  <td>
+
+                    <!-- Mantenimiento -->
+                    <div class="row">
+
+                      <!-- Relleno -->
+
+                      <!-- Ver -->
+                      <div class="col-lg-4 text-center">
+
+                        <a title="Ver detalle Producto" href="#"><i class="mdi mdi-eye animate-icon"></i></a>
+
+                      </div>
+
+                      <!-- Editar -->
+                      <div class="col-lg-4 text-center ">
+                        <a title="Editar Producto" href="#"><i class="mdi mdi-table-edit animate-icon"></i></a>
+
+                      </div>
+
+                      <!-- Borrar -->
+                      <div class="col-lg-4 text-center ">
+                        <a title="Eliminar Producto" href="#"><i class="mdi mdi-delete-forever animate-icon"></i></a>
+                      </div>
+
+                      <!-- Relleno -->
+
+                    </div>
+
+                  </td>
+                </tr>
+
+
+              </tbody>
+            </table>
+            <div class="row text-center mb-3 mt-3" style="width: 100%;" *ngIf="listaEquiposInner.length == 0">
+              <p>No se encontró data</p>
+
+          </div>
+
+
+          </div>
+          <button type="button" [disabled]="pagina==0" (click)="buscarPaginado(-1)"
+            class="btn btn-secondary mt-2">Anteriores</button>
+          &nbsp;
+          <button type="button" [disabled]="pagina * 5 > totalEquipos || nombreBusqueda.value != '' && desde < 10 " (click)="buscarPaginado(1)"
+            class="btn btn-secondary mt-2">Siguentes</button>
+
+          <span style="float: right; margin-top: 10px; padding-right: 10px;">Página {{ pagina + 1 }}</span>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>

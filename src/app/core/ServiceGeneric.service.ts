@@ -325,7 +325,33 @@ export class ServiceGenericService {
       );
   }
 
-  listandoEquiposInnerActivos() {
+  listandoEquiposInnerActivos(desde:number, nombre:any, cantidadPorPagina:number) {
+    const token = localStorage.getItem(environment.token);
+
+    if (nombre == '') {
+      nombre = null
+    }
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .get<RespuestaGeneral<EquipoInner[]>>(
+        `${environment.urlApi}equipo?desdeRegistro=${desde}&cantidadPorPagina=${cantidadPorPagina}&nombre=${nombre}`,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+  contandoEquiposActivos() {
     const token = localStorage.getItem(environment.token);
     var httpOptions = {
       headers: new HttpHeaders({
@@ -335,7 +361,7 @@ export class ServiceGenericService {
     };
     return this.http
       .get<RespuestaGeneral<EquipoInner[]>>(
-        `${environment.urlApi}equipo`,
+        `${environment.urlApi}equipo/total-activos`,
         httpOptions
       )
       .pipe(
@@ -410,6 +436,12 @@ export class ServiceGenericService {
     }
 
     if (mensaje == 'El token es inválido') {
+      localStorage.clear();
+      location.reload();
+    }
+
+
+    if (mensaje == 'jwt malformed') {
       localStorage.clear();
       location.reload();
     }

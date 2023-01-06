@@ -80,9 +80,9 @@ export class NuevoComponent implements OnInit {
     }
 
   prueba(e: any) {
-    console.log('cambio en tipo', this.equipo.tipoEquipo);
+    console.log('cambio en tipo', this.tipoEquipo);
     var tipoEquipoSeleccion =
-      this.listaTipoEquipo.filter((e) => e.id === this.equipo.tipoEquipo)[0]
+      this.listaTipoEquipo.filter((e) => e.id === this.tipoEquipo)[0]
         ?.codigo || null;
     console.log('tipoEquipoSeleccion', tipoEquipoSeleccion);
 
@@ -94,6 +94,8 @@ export class NuevoComponent implements OnInit {
   }
 
   guardar(){
+    this.equipo.tipoEquipo = this.tipoEquipo;
+    this.equipo.tipoEquipo = this.tipoEquipo;
     console.log("equipo", this.equipo);
     this.genericoServicio.alertaTimer("Creando Equipo");
 

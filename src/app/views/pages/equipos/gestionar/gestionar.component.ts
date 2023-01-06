@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { DataTable } from 'simple-datatables';
 import { ServiceGenericService } from '../../../../core/ServiceGeneric.service';
 import { Equipo, EquipoInner } from '../../../../core/GenericaInterfaz';
+import { environment } from 'src/environments/environment.prod';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-gestionar',
@@ -11,48 +13,85 @@ import { Equipo, EquipoInner } from '../../../../core/GenericaInterfaz';
 export class GestionarComponent implements OnInit {
   listaEquiposInner: EquipoInner[];
 
-  constructor(private genericosService: ServiceGenericService) {
+  mostrarLoader: boolean = false;
+  cantidadPorPagina: number= 5;
+  totalEquipos:number= 0;
+  desde: number= 0;
+  pagina: number= 0;
+  nombreBusqueda: string= '';
 
-    this.genericosService.alertaTimer("");
-    this.genericosService.listandoEquiposInnerActivos().subscribe((res) => {
-      this.listaEquiposInner = res.body;
+  constructor(private genericosService: ServiceGenericService,
+    private router: Router,
+    ) {
+ //verificando si tiene token
+ var tokenLocal = localStorage.getItem(environment.token);
+ console.log('tokenLocal', tokenLocal);
+ if (!tokenLocal) {
+   this.router.navigate(['auth/login']);
+ }
 
-      const dataTable = new DataTable('#dataTableExample');
-
-
-      for (let index = 0; index < this.listaEquiposInner.length; index++) {
-
-        let url = this.listaEquiposInner[index].imagenPrincipal;
-        if (!url) {
-          url = "../../../../../assets/images/others/noImagen.png";
-        }
-        console.log("url: " + url);
-
-        let newRowsD = [
-           '<img style="height: 50px; width: auto;" src="'+ url +'">',
-          this.listaEquiposInner[index].nombre,
-          this.listaEquiposInner[index].codigo,
-          this.listaEquiposInner[index].tipoEquipo.descripcion,
-          this.listaEquiposInner[index].categoria.descripcion,
-          this.listaEquiposInner[index].equipoPrincipal.nombre ? this.listaEquiposInner[index].equipoPrincipal.nombre +" | Cod: "+this.listaEquiposInner[index].equipoPrincipal.codigo: "N/A",
-          ''
-        ];
-        dataTable.rows.add(newRowsD);
-      }
-
-
-
-    this.genericosService.alertaTimerClose("");
-
-    });
+    this.mostrarLoader = true;
+    this.cargarEquipos();
   }
 
   ngOnInit(): void {
 
   }
 
+  cargarEquipos(){
+    this.genericosService.contandoEquiposActivos().subscribe(res=>
+      {
+
+        this.totalEquipos = Number(Object.values(res.body)[0]);
+      });
+    this.genericosService.listandoEquiposInnerActivos(this.desde, this.nombreBusqueda, this.cantidadPorPagina).subscribe((res) => {
+      this.listaEquiposInner = res.body;
+    this.mostrarLoader = false;
+
+
+    });
+  }
+
+  buscarPaginado(pagina: number){
+
+    console.log("pagina click", pagina);
+
+
+    this.pagina += pagina;
+    console.log("pagina sima", this.pagina);
+
+    if (pagina < 0 ) {
+      pagina = 0;
+    }
+
+    if (this.pagina > this.totalEquipos ) {
+      this.pagina = this.totalEquipos - 1;
+    }
+
+    this.desde = this.pagina*5;
+
+    if (this.desde > this.totalEquipos) {
+      this.pagina = this.pagina -1 ;
+      this.desde = this.pagina*5;
+    }
+    this.mostrarLoader = true;
+    console.log("pagina," , this.pagina);
+
+    this.cantidadPorPagina = 5;
+    this.cargarEquipos();
+
+  }
+
+  busquedaNombre(nombre:any){
+
+    this.nombreBusqueda= nombre;
+    this.cantidadPorPagina = 5;
+
+    this.mostrarLoader = true;
+    this.cargarEquipos();
+  }
+
   editar(data:any){
-    console.log("data click", data);
 
   }
 }
