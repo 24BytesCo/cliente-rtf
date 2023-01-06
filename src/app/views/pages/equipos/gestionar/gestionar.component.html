@@ -72,19 +72,19 @@
                       <!-- Ver -->
                       <div class="col-lg-4 text-center">
 
-                        <a title="Ver detalle Producto" href="#"><i class="mdi mdi-eye animate-icon"></i></a>
+                        <a  title="Ver detalle Producto" ><i style="font-size: 25px; color: #318edf;" class="mdi mdi-eye animate-icon"></i></a>
 
                       </div>
 
                       <!-- Editar -->
                       <div class="col-lg-4 text-center ">
-                        <a title="Editar Producto" href="#"><i class="mdi mdi-table-edit animate-icon"></i></a>
+                        <a (click)="openXlModalEditar(xlModal,  equipo.id)" title="Editar Producto" ><i style="font-size: 25px; color: #0d9972;" class="mdi mdi-table-edit animate-icon"></i></a>
 
                       </div>
 
                       <!-- Borrar -->
                       <div class="col-lg-4 text-center ">
-                        <a title="Eliminar Producto" href="#"><i class="mdi mdi-delete-forever animate-icon"></i></a>
+                        <a title="Eliminar Producto" ><i style="font-size: 25px; color: #bb3d3d;" class="mdi mdi-delete-forever animate-icon"></i></a>
                       </div>
 
                       <!-- Relleno -->
@@ -118,3 +118,16 @@
   </div>
 
 </div>
+
+
+<!-- Modal -->
+<ng-template #xlModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+    <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <app-editar [idUsuario] = "idusuarioEditar" ></app-editar>
+  </div>
+
+</ng-template>

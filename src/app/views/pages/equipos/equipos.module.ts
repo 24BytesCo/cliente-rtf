@@ -14,6 +14,7 @@ import { DropzoneModule } from 'ngx-dropzone-wrapper';
 import { DROPZONE_CONFIG } from 'ngx-dropzone-wrapper';
 import { DropzoneConfigInterface } from 'ngx-dropzone-wrapper';
 import { NgxMaskModule } from 'ngx-mask';
+import { EditarComponent } from './editar/editar.component';
 const DEFAULT_DROPZONE_CONFIG: DropzoneConfigInterface = {
   // Change this to your upload POST address:
   url: 'https://httpbin.org/post',
@@ -42,7 +43,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [EquiposComponent, GestionarComponent, NuevoComponent],
+  declarations: [EquiposComponent, GestionarComponent, NuevoComponent, EditarComponent],
   imports: [
     CommonModule,
     FormsModule,

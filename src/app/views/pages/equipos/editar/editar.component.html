@@ -1,0 +1,193 @@
+<form novalidate>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="card">
+        <h4 class="text-center mt-5">Editando Equipo</h4>
+
+        <div class="card-body">
+
+          <div class="row">
+            <!-- Primera Columna  -->
+            <div class="col-md-6">
+
+              <div class="row">
+                <!-- Nombre Equipo -->
+                <div class="col-md-12 mb-3">
+                  <label for="exampleInputUsername1" class="form-label">Nombre Equipo <span class="text-danger mt-1"
+                      *ngIf="requried?.errors?.required">
+                      *
+                    </span></label>
+                  <input class="form-control" [(ngModel)]="equipo.nombre"
+                    type="text" placeholder="Nombre Equipo" name="nombreEquipo" #requried="ngModel" required />
+
+                </div>
+
+                <!-- Tipo Equipo -->
+                <div class="col-md-12 mb-3">
+
+                    <label for="exampleInputUsername1" class="form-label">Tipo Equipo
+                      <span class="text-danger mt-1" *ngIf="!tipoEquipo">
+                        *
+                      </span>
+                    </label>
+                    <ng-select [items]="listaTipoEquipo" name="tipoEquipo" (change)="prueba($event)"
+                      bindLabel="descripcion" bindValue="id" [searchable]="false" [(ngModel)]="tipoEquipo">
+                    </ng-select>
+
+
+                </div>
+
+                <!-- SI es un componente debe tener un equipo Principal -->
+                <div class="col-md-12 mb-3" *ngIf="verSeleccionarPadre">
+                  <label for="exampleInputUsername1" class="form-label">Equipo Principal (Padre)</label>
+                  <ng-select (change)="cambioPadre($event)" [items]="listaEquiposPrincipalesActivos" [multiple]=false bindLabel="nombre" bindValue="id"
+                    [hideSelected]="true" [(ngModel)]="equipo.equipoPrincipal" name="equipoPrincipal">
+
+                    <ng-template ng-label-tmp let-item="item" let-clear="clear">
+                      <span class="ng-value-label"><img [src]="item.imagenPrincipal??'../../../../../assets/images/others/noImagen.png'" width="20px" height="20px">
+                        {{item.nombre }}</span>
+                      <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
+                    </ng-template>
+
+                    <ng-template ng-option-tmp let-item="item">
+                      <img [src]="item.imagenPrincipal??'../../../../../assets/images/others/noImagen.png'" width="20px" height="20px"> {{item.codigo +" | "+ item.nombre }}
+                    </ng-template>
+
+                  </ng-select>
+                  <div class="mt-2" *ngIf="equipo.equipoPrincipal">
+                    <p class="text-muted" style="font-size: 10px;">Equipo Principal Seleccionado:</p>
+                    <ul>
+                      <span style="font-size: 10px;" >COD: {{equipo.codigo}} | Nombre: {{nombreEquipoPadreSeleccionado}}</span>
+                    </ul>
+                  </div>
+                </div>
+
+                <!-- Categoria -->
+                <div class="col-md-12 mb-3">
+                  <label for="exampleInputUsername1" class="form-label">Categoría Equipo
+                    <span class="text-danger mt-1" *ngIf="!equipo.categoria">
+                      *
+                    </span>
+                  </label>
+                  <ng-select (change)="prueba($event)" [items]="listaCategoriaEquipo" name="categoriaEquipo"
+                    bindLabel="descripcion" bindValue="id" [searchable]="false" [(ngModel)]="equipo.categoria">
+                  </ng-select>
+
+                </div>
+              </div>
+
+
+
+            </div>
+
+            <!-- Segunda Columna de las imagenes -->
+            <div class="col-md-6">
+              <div class="row">
+                <div class="col-md-12">
+                  <p for="exampleInputUsername1" class="form-label">Adicionar Imágenes Equipo</p>
+                </div>
+                <div class="col-md-12">
+                  <div class="card" style="width:  90% !important">
+                    <div class="card-body">
+
+                      <div class="dropzone" [dropzone]="config" (error)="onUploadError($event)"
+                        (success)="onUploadSuccess($event)"></div>
+                      <button class="btn btn-secondary mt-2 d-block ms-auto"
+                        (click)="resetDropzoneUploads()">Reset</button>
+
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Marca Equipo y Número de Serie -->
+          <div class="mb-3 mt-5">
+
+            <div class="row">
+
+              <!-- Marca Equipo -->
+              <div class="col-md-6">
+                <label for="marcaEquipo" class="form-label">Marca <span class="text-danger mt-1"
+                    *ngIf="requriedMarca?.errors?.required">
+                    *
+                  </span> </label>
+                <input class="form-control" [(ngModel)]="equipo.marca" type="text" placeholder="Marca Equipo"
+                  name="marcaEquipo" #requriedMarca="ngModel" required />
+              </div>
+
+              <!-- Número de Serie -->
+              <div class="col-md-6">
+                <label for="marcaEquipo" class="form-label">Número de Serie <span class="text-danger mt-1"
+                    *ngIf="requriedSerie?.errors?.required">
+                    *
+                  </span> </label>
+                <input class="form-control" [(ngModel)]="equipo.noSerie" type="text" placeholder="No Serie"
+                  name="marcaEquipo" #requriedSerie="ngModel" required />
+              </div>
+
+            </div>
+
+          </div>
+
+          <!-- Descripción -->
+          <div class="mb-3">
+            <label for="exampleFormControlTextarea1" class="form-label">Descripción <span class="text-danger mt-1"
+                *ngIf="requriedDescripcion?.errors?.required">
+                *
+              </span></label>
+            <textarea class="form-control" [(ngModel)]="equipo.descripcion" name="descripcion"
+              placeholder="Descripción del Equipo" rows="3" #requriedDescripcion="ngModel" required></textarea>
+          </div>
+
+          <!-- Modelo | Código | Fecha Compra empresa -->
+          <div class="mb-3">
+
+          <!-- Modelo | Código | Fecha Compra empresa -->
+
+            <div class="row">
+
+              <!-- Modelo Equipo -->
+              <div class="col-md-4">
+                <label for="modeloEquipo" class="form-label">Modelo <span class="text-danger mt-1"
+                    *ngIf="requriedModelo?.errors?.required">
+                    *
+                  </span> </label>
+                <input class="form-control" [(ngModel)]="equipo.modelo" type="text" placeholder="Modelo Equipo"
+                  name="ModeloEquipo" #requriedModelo="ngModel" required />
+              </div>
+
+              <!-- Código Equipo -->
+              <div class="col-md-4">
+                <label for="codigoEquipo" class="form-label">Código<span class="text-danger mt-1"
+                    *ngIf="requriedCodigo?.errors?.required">
+                    *
+                  </span> </label>
+                <input class="form-control" [(ngModel)]="equipo.codigo" type="text" placeholder="Código único equipo"
+                  name="codigoEquipo" #requriedCodigo="ngModel" required />
+              </div>
+
+
+              <!-- Fecha Compra Empresa -->
+              <div class="col-md-4">
+                <label class="form-label">Fecha Aquisición Empresa:</label>
+                <input [(ngModel)]="equipo.fechaAdquisionEmpresa" name = "fechaAdquisionEmpresa" class="form-control mb-4 mb-md-0" mask="d0/M0/0000"
+                  placeholder="dd/mm/yyyy" />
+              </div>
+
+            </div>
+
+          </div>
+
+          <div style="text-align: center; margin-top: 50px; ">
+            <button (click)="guardar()" style="width: 200px;" type="button" class="btn btn-primary">Editar Equipo</button>
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</form>

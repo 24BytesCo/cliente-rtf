@@ -52,6 +52,7 @@ export class ServiceGenericService {
     });
 
     if (tipo != 'success') {
+
       Toast.fire({
         icon: 'error',
         title: mensaje,
@@ -351,6 +352,30 @@ export class ServiceGenericService {
       );
   }
 
+  buscarUnEquipoConId(idEquipo: string){
+    const token = localStorage.getItem(environment.token);
+
+
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .get<RespuestaGeneral<EquipoInner>>(
+        `${environment.urlApi}equipo/${idEquipo}`,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
   contandoEquiposActivos() {
     const token = localStorage.getItem(environment.token);
     var httpOptions = {
@@ -436,6 +461,16 @@ export class ServiceGenericService {
     }
 
     if (mensaje == 'El token es inválido') {
+      localStorage.clear();
+      location.reload();
+    }
+
+    if (mensaje == 'read ECONNRESET') {
+      localStorage.clear();
+      location.reload();
+    }
+
+    if (mensaje == 'Cannot enqueue Query after fatal error.') {
       localStorage.clear();
       location.reload();
     }

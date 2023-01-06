@@ -123,6 +123,7 @@ export class NuevoComponent implements OnInit {
     });
 
   }
+
   onUploadError(event: any): void {
     console.log('onUploadError:', event);
   }
