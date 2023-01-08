@@ -5,6 +5,7 @@ import { Equipo, EquipoInner } from '../../../../core/GenericaInterfaz';
 import { environment } from 'src/environments/environment.prod';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { EventosManualesService } from 'src/app/core/EventosManuales.service';
 
 @Component({
   selector: 'app-gestionar',
@@ -25,10 +26,24 @@ export class GestionarComponent implements OnInit {
   constructor(
     private genericosService: ServiceGenericService,
     private router: Router,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private eventosManualesService: EventosManualesService
   ) {}
 
   ngOnInit(): void {
+    //Observable para estar escuchando los cambios en la edición
+    this.eventosManualesService.edicionEquipoSatrisfactoria$.subscribe(
+      (res) => {
+        console.log('CAmbios de valor en edicion = ', res);
+        if (res) {
+          this.mostrarLoader = true;
+
+          this.cargarEquipos();
+
+          this.modalService.dismissAll();
+        }
+      }
+    );
 
     this.verificandoPermisos();
     this.mostrarLoader = true;
@@ -59,7 +74,6 @@ export class GestionarComponent implements OnInit {
         this.mostrarLoader = false;
       });
   }
-
 
   buscarPaginado(pagina: number) {
     console.log('pagina click', pagina);

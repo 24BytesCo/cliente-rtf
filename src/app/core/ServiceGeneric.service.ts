@@ -39,31 +39,25 @@ export class ServiceGenericService {
   }
 
   alertaSuperiorDerechaPequena(mensaje: string, tipo: string) {
-    const Toast = Swal.mixin({
-      toast: true,
-      position: 'top-end',
-      showConfirmButton: false,
-      timer: 3000,
-      timerProgressBar: true,
-      didOpen: (toast) => {
-        toast.addEventListener('mouseenter', Swal.stopTimer);
-        toast.addEventListener('mouseleave', Swal.resumeTimer);
-      },
-    });
-
     if (tipo != 'success') {
-
-      Toast.fire({
+      Swal.fire({
+        position: 'top-end',
         icon: 'error',
         title: mensaje,
+        showConfirmButton: false,
+        timer: 3000,
       });
       return;
     }
-
-    Toast.fire({
+    Swal.fire({
+      position: 'top-end',
       icon: 'success',
       title: mensaje,
-    });
+      showConfirmButton: false,
+      timer: 3000
+    })
+
+
   }
 
   redireccionarRutaToken(nombreRuta: string, token: string) {
@@ -253,33 +247,56 @@ export class ServiceGenericService {
       );
   }
 
+  editarEquipo(body: Equipo) {
+    const token = localStorage.getItem(environment.token);
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .put<RespuestaGeneral<TipoEquipo[]>>(
+        `${environment.urlApi}equipo`,
+        body,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
   alertaTimer(mensajeUno: string) {
-    let timerInterval:any;
+    let timerInterval: any;
     Swal.fire({
-      title: mensajeUno+"</br>",
+      title: mensajeUno + '</br>',
       html: 'Procesando solicitud',
       timer: 8000,
       timerProgressBar: true,
       didOpen: () => {
         Swal.showLoading(null);
-        const b = Swal.getHtmlContainer()?.querySelector('b')||''
+        const b = Swal.getHtmlContainer()?.querySelector('b') || '';
         timerInterval = setInterval(() => {
-          b ? b.textContent = Swal.getTimerLeft()?.toString() || null : null
-        }, 100)
+          b ? (b.textContent = Swal.getTimerLeft()?.toString() || null) : null;
+        }, 100);
       },
       willClose: () => {
-        clearInterval(timerInterval)
-      }
+        clearInterval(timerInterval);
+      },
     }).then((result) => {
       /* Read more about handling dismissals below */
       if (result.dismiss === Swal.DismissReason.timer) {
-        console.log('I was closed by the timer')
+        console.log('I was closed by the timer');
       }
-    })
+    });
   }
 
   alertaTimerClose(mensajeUno: string) {
-    let timerInterval:any;
+    let timerInterval: any;
     Swal.fire({
       title: mensajeUno,
       html: 'Procesando <b></b> solicitud',
@@ -287,22 +304,21 @@ export class ServiceGenericService {
       timerProgressBar: true,
       didOpen: () => {
         Swal.showLoading(null);
-        const b = Swal.getHtmlContainer()?.querySelector('b')||''
+        const b = Swal.getHtmlContainer()?.querySelector('b') || '';
         timerInterval = setInterval(() => {
-          b ? b.textContent = Swal.getTimerLeft()?.toString() || null : null
-        }, 100)
+          b ? (b.textContent = Swal.getTimerLeft()?.toString() || null) : null;
+        }, 100);
       },
       willClose: () => {
-        clearInterval(timerInterval)
-      }
+        clearInterval(timerInterval);
+      },
     }).then((result) => {
       /* Read more about handling dismissals below */
       if (result.dismiss === Swal.DismissReason.timer) {
-        console.log('I was closed by the timer')
+        console.log('I was closed by the timer');
       }
-    })
+    });
   }
-
 
   listandoCategoriaEquipo() {
     const token = localStorage.getItem(environment.token);
@@ -326,11 +342,15 @@ export class ServiceGenericService {
       );
   }
 
-  listandoEquiposInnerActivos(desde:number, nombre:any, cantidadPorPagina:number) {
+  listandoEquiposInnerActivos(
+    desde: number,
+    nombre: any,
+    cantidadPorPagina: number
+  ) {
     const token = localStorage.getItem(environment.token);
 
     if (nombre == '') {
-      nombre = null
+      nombre = null;
     }
     var httpOptions = {
       headers: new HttpHeaders({
@@ -352,9 +372,8 @@ export class ServiceGenericService {
       );
   }
 
-  buscarUnEquipoConId(idEquipo: string){
+  buscarUnEquipoConId(idEquipo: string) {
     const token = localStorage.getItem(environment.token);
-
 
     var httpOptions = {
       headers: new HttpHeaders({
@@ -474,7 +493,6 @@ export class ServiceGenericService {
       localStorage.clear();
       location.reload();
     }
-
 
     if (mensaje == 'jwt malformed') {
       localStorage.clear();

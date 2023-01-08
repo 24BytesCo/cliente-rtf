@@ -1,25 +1,37 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { DropzoneConfigInterface, DropzoneDirective } from 'ngx-dropzone-wrapper';
-import { CategoriaEquipo, Equipo, TipoEquipo } from 'src/app/core/GenericaInterfaz';
+import {
+  DropzoneConfigInterface,
+  DropzoneDirective,
+} from 'ngx-dropzone-wrapper';
+import {
+  CategoriaEquipo,
+  Equipo,
+  TipoEquipo,
+} from 'src/app/core/GenericaInterfaz';
 import { ServiceGenericService } from 'src/app/core/ServiceGeneric.service';
 import { RespuestaGeneral } from '../../auth/login/model/Login';
 import Swal from 'sweetalert2';
+import * as router from '@angular/router';
+import { environment } from 'src/environments/environment.prod';
+import { Router } from '@angular/router';
+import { EventosManualesService } from 'src/app/core/EventosManuales.service';
 
 @Component({
   selector: 'app-editar',
   templateUrl: './editar.component.html',
-  styleUrls: ['./editar.component.scss']
+  styleUrls: ['./editar.component.scss'],
 })
 export class EditarComponent implements OnInit {
-  @Input() idUsuario: string ='';
-  @ViewChild(DropzoneDirective, { static: false }) directiveRef?: DropzoneDirective;
+  @Input() idUsuario: string = '';
+  @ViewChild(DropzoneDirective, { static: false })
+  directiveRef?: DropzoneDirective;
 
   public config: DropzoneConfigInterface = {
     clickable: true,
     maxFiles: 5,
     autoReset: null,
     errorReset: null,
-    cancelReset: null
+    cancelReset: null,
   };
 
   equipo: Equipo = {
@@ -38,8 +50,8 @@ export class EditarComponent implements OnInit {
     tipoEquipo: '',
   };
 
-  tipoEquipo:any = null;
-  tipoEquipoCode:any = null;
+  tipoEquipo: any = null;
+  tipoEquipoCode: any = null;
   listaTipoEquipo: TipoEquipo[];
   listaCategoriaEquipo: CategoriaEquipo[];
   listaEquiposPrincipalesActivos: Equipo[];
@@ -48,67 +60,66 @@ export class EditarComponent implements OnInit {
 
   constructor(
     private genericosService: ServiceGenericService,
+    private router: Router,
+    private eventosManualesService: EventosManualesService
 
-  ) { }
+  ) {
+    this.verificandoPermisos();
+  }
 
   ngOnInit(): void {
-
     if (this.idUsuario != '') {
       this.buscarUnEquipoConId(this.idUsuario);
-
     }
 
     this.genericosService
-    .listandoCategoriaEquipo()
-    .subscribe((res: RespuestaGeneral<CategoriaEquipo[]>) => {
-      this.listaCategoriaEquipo = res.body;
-
-    });
-
-
-    this.genericosService
-    .listandoTiposEquipos()
-    .subscribe((res: RespuestaGeneral<TipoEquipo[]>) => {
-      this.listaTipoEquipo = res.body;
-
-
-
-
-    });
-
-
-    this.genericosService
-     .listandoEquiposPrincipalesActivos().subscribe((res: RespuestaGeneral<Equipo[]>)=>
-      {
-        this.listaEquiposPrincipalesActivos = res.body;
-
+      .listandoCategoriaEquipo()
+      .subscribe((res: RespuestaGeneral<CategoriaEquipo[]>) => {
+        this.listaCategoriaEquipo = res.body;
       });
 
+    this.genericosService
+      .listandoTiposEquipos()
+      .subscribe((res: RespuestaGeneral<TipoEquipo[]>) => {
+        this.listaTipoEquipo = res.body;
+      });
 
-      setTimeout(() => {
-      this.prueba("r");
-      this.cambioPadre("r");
+    this.genericosService
+      .listandoEquiposPrincipalesActivos()
+      .subscribe((res: RespuestaGeneral<Equipo[]>) => {
+        this.listaEquiposPrincipalesActivos = res.body;
+      });
 
-      }, 2000);
-
-
+    setTimeout(() => {
+      this.prueba('r');
+      this.cambioPadre('r');
+    }, 2000);
   }
 
-  buscarUnEquipoConId(idEquipoEditar:string){
-    this.genericosService.buscarUnEquipoConId(idEquipoEditar).subscribe(res=>{
+  verificandoPermisos() {
+    //verificando si tiene token
+    var tokenLocal = localStorage.getItem(environment.token);
+    console.log('tokenLocal', tokenLocal);
+    if (!tokenLocal) {
+      this.router.navigate(['auth/login']);
+    }
+  }
 
-      this.equipo = res.body[0];
+  buscarUnEquipoConId(idEquipoEditar: string) {
+    this.genericosService
+      .buscarUnEquipoConId(idEquipoEditar)
+      .subscribe((res) => {
+        this.equipo = res.body[0];
 
-      this.tipoEquipo = this.equipo.tipoEquipo;
-
-    });
+        this.tipoEquipo = this.equipo.tipoEquipo;
+      });
   }
 
   prueba(e: any) {
     console.log('cambio en tipo', this.tipoEquipo);
     var tipoEquipoSeleccion =
-      this.listaTipoEquipo.filter((e) => e.id === this.tipoEquipo)[0]
-        ?.codigo || null;
+      this.listaTipoEquipo.filter((e) => e.id === this.tipoEquipo)[0]?.codigo ||
+      null;
     console.log('tipoEquipoSeleccion', tipoEquipoSeleccion);
 
     if (tipoEquipoSeleccion === 'COMP') {
@@ -118,30 +129,32 @@ export class EditarComponent implements OnInit {
     }
   }
 
-  cambioPadre(e:any){
-    console.log("equipo.padre", this.equipo.equipoPrincipal);
+  cambioPadre(e: any) {
+    console.log('equipo.padre', this.equipo.equipoPrincipal);
 
-    if(this.equipo.equipoPrincipal){
-      this.nombreEquipoPadreSeleccionado = this.listaEquiposPrincipalesActivos.filter((e)=> e.id === this.equipo.equipoPrincipal)[0].nombre;
-
+    if (this.equipo.equipoPrincipal) {
+      this.nombreEquipoPadreSeleccionado =
+        this.listaEquiposPrincipalesActivos.filter(
+          (e) => e.id === this.equipo.equipoPrincipal
+        )[0].nombre;
     }
-
   }
 
-  guardar(){
-    this.tipoEquipoCode = this.listaTipoEquipo.filter(r=> r.id == this.tipoEquipo)[0].codigo;
+  guardar() {
+    this.tipoEquipoCode = this.listaTipoEquipo.filter(
+      (r) => r.id == this.tipoEquipo
+    )[0].codigo;
     this.equipo.tipoEquipo = this.tipoEquipo;
-    console.log("equipo", this.equipo);
-    this.genericosService.alertaTimer("Editando Equipo");
+    console.log('equipo', this.equipo);
+    this.genericosService.alertaTimer('Editando Equipo');
 
     //Validaciones datos obligatorios
-    if(!this.validacionesGuardar()){
+    if (!this.validacionesGuardar()) {
       return;
     }
 
-
-    this.genericosService.creandoNuevoEquipo(this.equipo).subscribe(res=>{
-      this.equipo= {
+    this.genericosService.editarEquipo(this.equipo).subscribe((res) => {
+      this.equipo = {
         nombre: '',
         categoria: '',
         codigo: '',
@@ -156,67 +169,80 @@ export class EditarComponent implements OnInit {
         noSerie: '',
         tipoEquipo: '',
       };
-      console.log("res guardar", res);
+      console.log('res editar', res);
       if (!res.error) {
-        this.genericosService.alertaSuperiorDerechaPequena("¡Se ha creado el equipo corréctavmente!", "success");
+
+        this.eventosManualesService.edicionEquipoSatrisfactoria$.emit(true);
+
+        this.genericosService.alertaSuperiorDerechaPequena(
+          '¡Se ha modificado el equipo corréctamente!',
+          'success'
+        );
       }
-
     });
-
   }
 
-  validacionesGuardar(){
-
-
+  validacionesGuardar() {
     if (!this.equipo.nombre) {
+      this.genericosService.alertaSuperiorDerechaPequena(
+        '¡El nombre es requerido!',
+        'error'
+      );
 
-      this.alertaPersonalizada("El nombre es obligatorio." ,"error");
       return false;
-
     }
 
     if (!this.equipo.codigo) {
-      this.alertaPersonalizada("Debes proporcionar un código." ,"error");
+      this.genericosService.alertaSuperiorDerechaPequena(
+        '¡El código es requerido!',
+        'error'
+      );
       return false;
     }
 
     if (!this.equipo.categoria) {
-      this.alertaPersonalizada("Debes seleccionar una categoría." ,"error");
+      this.alertaPersonalizada('Debes seleccionar una categoría.', 'error');
+      this.genericosService.alertaSuperiorDerechaPequena(
+        '¡La categoría requerida!',
+        'error'
+      );
+
       return false;
     }
     if (!this.equipo.noSerie) {
-      this.alertaPersonalizada("Debes proporcionar un número de serie." ,"error");
+      this.genericosService.alertaSuperiorDerechaPequena(
+        '¡El número de serie es requerido!',
+        'error'
+      );
       return false;
     }
 
-
-    console.log("this.equipo.tipoEquipoCode", this.tipoEquipoCode);
-    console.log("this.equipo.equipoPrincipal", this.equipo.equipoPrincipal);
-
-    if (this.tipoEquipoCode == 'COMP' && (!this.equipo.equipoPrincipal || this.equipo.equipoPrincipal && this.equipo.equipoPrincipal == '')) {
-      this.alertaPersonalizada("Debes seleccionar un equipo Principal o Padre." ,"error");
+    if (
+      this.tipoEquipoCode == 'COMP' &&
+      (!this.equipo.equipoPrincipal ||
+        (this.equipo.equipoPrincipal && this.equipo.equipoPrincipal == ''))
+    ) {
+      this.alertaPersonalizada(
+        'Debes seleccionar un equipo Principal o Padre.',
+        'error'
+      );
       return false;
     }
 
     return true;
-
   }
 
   alertaPersonalizada(mensaje: string, tipo: string) {
-
-    if (tipo== "error") {
+    if (tipo == 'error') {
       Swal.fire({
         title: mensaje,
         text: '¡Error de validación!',
         icon: 'error',
-        confirmButtonText: 'Cool'
-      })
+        confirmButtonText: 'Cool',
+      });
 
       return;
     }
-
-
-
   }
 
   onUploadError(event: any): void {
@@ -232,6 +258,4 @@ export class EditarComponent implements OnInit {
       this.directiveRef.reset();
     }
   }
-
-
 }
