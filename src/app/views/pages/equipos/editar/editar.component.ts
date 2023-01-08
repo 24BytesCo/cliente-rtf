@@ -23,6 +23,7 @@ import { EventosManualesService } from 'src/app/core/EventosManuales.service';
 })
 export class EditarComponent implements OnInit {
   @Input() idUsuario: string = '';
+  @Input() ver: boolean = false;
   @ViewChild(DropzoneDirective, { static: false })
   directiveRef?: DropzoneDirective;
 
@@ -37,6 +38,7 @@ export class EditarComponent implements OnInit {
   equipo: Equipo = {
     nombre: '',
     categoria: '',
+    imagenPrincipal:'',
     codigo: '',
     equipoPrincipal: '',
     descripcion: '',
@@ -158,6 +160,7 @@ export class EditarComponent implements OnInit {
         nombre: '',
         categoria: '',
         codigo: '',
+        imagenPrincipal: '',
         equipoPrincipal: '',
         descripcion: '',
         fechaAdquisionEmpresa: new Date(),

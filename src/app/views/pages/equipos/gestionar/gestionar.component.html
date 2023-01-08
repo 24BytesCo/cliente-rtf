@@ -72,7 +72,7 @@
                       <!-- Ver -->
                       <div class="col-lg-4 text-center">
 
-                        <a  title="Ver detalle Producto" ><i style="font-size: 25px; color: #318edf;" class="mdi mdi-eye animate-icon"></i></a>
+                        <a (click)="openXlModalVer(xlModal,  equipo.id)"  title="Ver detalle Producto" ><i style="font-size: 25px; color: #318edf;" class="mdi mdi-eye animate-icon"></i></a>
 
                       </div>
 
@@ -84,7 +84,7 @@
 
                       <!-- Borrar -->
                       <div class="col-lg-4 text-center ">
-                        <a title="Eliminar Producto" ><i style="font-size: 25px; color: #bb3d3d;" class="mdi mdi-delete-forever animate-icon"></i></a>
+                        <a (click)="eliminar(equipo.id)" title="Eliminar Producto" ><i style="font-size: 25px; color: #bb3d3d;" class="mdi mdi-delete-forever animate-icon"></i></a>
                       </div>
 
                       <!-- Relleno -->
@@ -123,11 +123,11 @@
 <!-- Modal -->
 <ng-template #xlModal let-modal>
   <div class="modal-header">
-    <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+    <h5 class="modal-title" id="exampleModalLabel">{{ tituloModal}}</h5>
     <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
   </div>
   <div class="modal-body">
-    <app-editar [idUsuario] = "idusuarioEditar" ></app-editar>
+    <app-editar [idUsuario] = "idusuarioEditar" [ver] = "verDetalles" ></app-editar>
   </div>
 
 </ng-template>

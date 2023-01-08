@@ -6,6 +6,7 @@ import { environment } from 'src/environments/environment.prod';
 import { Router } from '@angular/router';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EventosManualesService } from 'src/app/core/EventosManuales.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-gestionar',
@@ -22,6 +23,10 @@ export class GestionarComponent implements OnInit {
   pagina: number = 0;
   nombreBusqueda: string = '';
   idusuarioEditar: string = '';
+  tituloModal:string = '';
+
+  verDetalles: boolean = false;
+
 
   constructor(
     private genericosService: ServiceGenericService,
@@ -111,11 +116,12 @@ export class GestionarComponent implements OnInit {
   }
 
   openXlModalEditar(content: TemplateRef<any>, idEquipo: string) {
-    console.log('idEquipoEditar', idEquipo);
+
+    this.verDetalles = false;
 
     this.idusuarioEditar = idEquipo;
+    this.tituloModal = 'Editar Equipo';
 
-    console.log('content', content);
 
     this.modalService
       .open(content, { size: 'xl' })
@@ -123,5 +129,44 @@ export class GestionarComponent implements OnInit {
         console.log('Modal closed' + result);
       })
       .catch((res) => {});
+  }
+
+  openXlModalVer(content: TemplateRef<any>, idEquipo: string) {
+
+
+    this.idusuarioEditar = idEquipo;
+    this.tituloModal = 'Detalle Equipo';
+
+    this.verDetalles= true;
+
+
+    this.modalService
+      .open(content, { size: 'xl' })
+      .result.then((result) => {
+        console.log('Modal closed' + result);
+      })
+      .catch((res) => {});
+  }
+
+  eliminar(idEquipo:string){
+    Swal.fire({
+      title: 'Inactivarás el equipo </b> ¿deseas continuar?',
+      showDenyButton: true,
+      showCancelButton: true,
+      confirmButtonText: 'Si, contunuar',
+      denyButtonText: `No, cancelar`,
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.genericosService.eliminarEquipo(idEquipo).subscribe(res=>{
+          this.mostrarLoader = true;
+          this.cargarEquipos();
+          Swal.fire('Producto Inactivado', '', 'success');
+
+        });
+      } else if (result.isDenied) {
+        Swal.fire('El producto no se ha inactivado', '', 'info')
+      }
+    })
   }
 }

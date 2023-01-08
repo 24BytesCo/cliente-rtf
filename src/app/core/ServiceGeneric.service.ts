@@ -202,6 +202,28 @@ export class ServiceGenericService {
       );
   }
 
+  eliminarEquipo(idEquipo: string) {
+    const token = localStorage.getItem(environment.token);
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .delete<RespuestaGeneral<TipoEquipo[]>>(
+        `${environment.urlApi}equipo/${idEquipo}`,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
   listandoEquiposPrincipalesActivos() {
     const token = localStorage.getItem(environment.token);
     var httpOptions = {

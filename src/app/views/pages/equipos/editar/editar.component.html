@@ -2,7 +2,8 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="card">
-        <h4 class="text-center mt-5">Editando Equipo</h4>
+        <h4 *ngIf="!ver" class="text-center mt-5">Editando Equipo</h4>
+        <h4 *ngIf="ver" class="text-center mt-5">Detalle Equipo</h4>
 
         <div class="card-body">
 
@@ -17,7 +18,7 @@
                       *ngIf="requried?.errors?.required">
                       *
                     </span></label>
-                  <input class="form-control" [(ngModel)]="equipo.nombre"
+                  <input class="form-control" [disabled]="ver" [(ngModel)]="equipo.nombre"
                     type="text" placeholder="Nombre Equipo" name="nombreEquipo" #requried="ngModel" required />
 
                 </div>
@@ -30,7 +31,7 @@
                         *
                       </span>
                     </label>
-                    <ng-select [items]="listaTipoEquipo" name="tipoEquipo" (change)="prueba($event)"
+                    <ng-select [disabled]="ver" [items]="listaTipoEquipo" name="tipoEquipo" (change)="prueba($event)"
                       bindLabel="descripcion" bindValue="id" [searchable]="false" [(ngModel)]="tipoEquipo">
                     </ng-select>
 
@@ -40,7 +41,7 @@
                 <!-- SI es un componente debe tener un equipo Principal -->
                 <div class="col-md-12 mb-3" *ngIf="verSeleccionarPadre">
                   <label for="exampleInputUsername1" class="form-label">Equipo Principal (Padre)</label>
-                  <ng-select (change)="cambioPadre($event)" [items]="listaEquiposPrincipalesActivos" [multiple]=false bindLabel="nombre" bindValue="id"
+                  <ng-select [disabled]="ver" (change)="cambioPadre($event)" [items]="listaEquiposPrincipalesActivos" [multiple]=false bindLabel="nombre" bindValue="id"
                     [hideSelected]="true" [(ngModel)]="equipo.equipoPrincipal" name="equipoPrincipal">
 
                     <ng-template ng-label-tmp let-item="item" let-clear="clear">
@@ -69,7 +70,7 @@
                       *
                     </span>
                   </label>
-                  <ng-select (change)="prueba($event)" [items]="listaCategoriaEquipo" name="categoriaEquipo"
+                  <ng-select [disabled]="ver" (change)="prueba($event)" [items]="listaCategoriaEquipo" name="categoriaEquipo"
                     bindLabel="descripcion" bindValue="id" [searchable]="false" [(ngModel)]="equipo.categoria">
                   </ng-select>
 
@@ -81,7 +82,7 @@
             </div>
 
             <!-- Segunda Columna de las imagenes -->
-            <div class="col-md-6">
+            <div *ngIf="!ver" class="col-md-6">
               <div class="row">
                 <div class="col-md-12">
                   <p for="exampleInputUsername1" class="form-label">Adicionar Imágenes Equipo</p>
@@ -101,6 +102,10 @@
               </div>
 
             </div>
+
+            <div class="col-md-6 text-center" *ngIf="ver">
+              <img style="width: 50%;" [src]=" !equipo.imagenPrincipal? '/../../../../assets/images/others/noImagen.png' : equipo.imagenPrincipal == '' ? '/../../../../assets/images/others/noImagen.png': equipo.imagenPrincipal" alt="" srcset="">
+            </div>
           </div>
 
           <!-- Marca Equipo y Número de Serie -->
@@ -114,7 +119,7 @@
                     *ngIf="requriedMarca?.errors?.required">
                     *
                   </span> </label>
-                <input class="form-control" [(ngModel)]="equipo.marca" type="text" placeholder="Marca Equipo"
+                <input [disabled]="ver" class="form-control" [(ngModel)]="equipo.marca" type="text" placeholder="Marca Equipo"
                   name="marcaEquipo" #requriedMarca="ngModel" required />
               </div>
 
@@ -124,7 +129,7 @@
                     *ngIf="requriedSerie?.errors?.required">
                     *
                   </span> </label>
-                <input class="form-control" [(ngModel)]="equipo.noSerie" type="text" placeholder="No Serie"
+                <input [disabled]="ver" class="form-control" [(ngModel)]="equipo.noSerie" type="text" placeholder="No Serie"
                   name="marcaEquipo" #requriedSerie="ngModel" required />
               </div>
 
@@ -138,7 +143,7 @@
                 *ngIf="requriedDescripcion?.errors?.required">
                 *
               </span></label>
-            <textarea class="form-control" [(ngModel)]="equipo.descripcion" name="descripcion"
+            <textarea [disabled]="ver" class="form-control" [(ngModel)]="equipo.descripcion" name="descripcion"
               placeholder="Descripción del Equipo" rows="3" #requriedDescripcion="ngModel" required></textarea>
           </div>
 
@@ -155,7 +160,7 @@
                     *ngIf="requriedModelo?.errors?.required">
                     *
                   </span> </label>
-                <input class="form-control" [(ngModel)]="equipo.modelo" type="text" placeholder="Modelo Equipo"
+                <input [disabled]="ver" class="form-control" [(ngModel)]="equipo.modelo" type="text" placeholder="Modelo Equipo"
                   name="ModeloEquipo" #requriedModelo="ngModel" required />
               </div>
 
@@ -165,7 +170,7 @@
                     *ngIf="requriedCodigo?.errors?.required">
                     *
                   </span> </label>
-                <input class="form-control" [(ngModel)]="equipo.codigo" type="text" placeholder="Código único equipo"
+                <input [disabled]="ver" class="form-control" [(ngModel)]="equipo.codigo" type="text" placeholder="Código único equipo"
                   name="codigoEquipo" #requriedCodigo="ngModel" required />
               </div>
 
@@ -173,7 +178,7 @@
               <!-- Fecha Compra Empresa -->
               <div class="col-md-4">
                 <label class="form-label">Fecha Aquisición Empresa:</label>
-                <input [(ngModel)]="equipo.fechaAdquisionEmpresa" name = "fechaAdquisionEmpresa" class="form-control mb-4 mb-md-0" mask="d0/M0/0000"
+                <input [disabled]="ver" [(ngModel)]="equipo.fechaAdquisionEmpresa" name = "fechaAdquisionEmpresa" class="form-control mb-4 mb-md-0" mask="d0/M0/0000"
                   placeholder="dd/mm/yyyy" />
               </div>
 
@@ -182,7 +187,7 @@
           </div>
 
           <div style="text-align: center; margin-top: 50px; ">
-            <button (click)="guardar()" style="width: 200px;" type="button" class="btn btn-primary">Editar Equipo</button>
+            <button *ngIf="!ver" (click)="guardar()" style="width: 200px;" type="button" class="btn btn-primary">Editar Equipo</button>
 
           </div>
 

@@ -24,6 +24,7 @@ export class Equipo {
   imagenArrayUrl: Array<string>;
   modelo: string;
   codigo: string;
+  imagenPrincipal: string;
   tipoEquipo: string;
 
   constructor() {
@@ -34,6 +35,7 @@ export class Equipo {
     this.noSerie = '';
     this.equipoPrincipal = '';
     this.descripcion = '';
+    this.imagenPrincipal = '';
     this.fechaRegistro = new Date();
     this.fechaAdquisionEmpresa = new Date();
     this.imagenArrayUrl = [''];
