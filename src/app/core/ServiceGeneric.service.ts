@@ -14,7 +14,7 @@ import {
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoaderService } from './loader.service';
-import { EquipoInner } from './GenericaInterfaz';
+import { EquipoInner, Casos } from './GenericaInterfaz';
 import {
   UsuarioToken,
   TipoEquipo,
@@ -257,6 +257,29 @@ export class ServiceGenericService {
     return this.http
       .post<RespuestaGeneral<TipoEquipo[]>>(
         `${environment.urlApi}equipo`,
+        body,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+  creandoNuevoCaso(body: Casos) {
+    const token = localStorage.getItem(environment.token);
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .post<RespuestaGeneral<TipoEquipo[]>>(
+        `${environment.urlApi}caso`,
         body,
         httpOptions
       )

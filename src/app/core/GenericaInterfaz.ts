@@ -45,6 +45,29 @@ export class Equipo {
   }
 }
 
+export class Casos{
+  numeroCaso: string;
+  estadoCaso: string;
+  tecnicoAsignado: string;
+  equipoRelacionado: string;
+  usuarioReporta: string;
+  fechaCreacion: Date;
+  fechaSolucion?: Date;
+  observacionInicial: string;
+
+      constructor(){
+        this.numeroCaso = '';
+        this.estadoCaso = '';
+        this.tecnicoAsignado = '';
+        this.equipoRelacionado = '';
+        this.usuarioReporta = '';
+        this.fechaCreacion = new Date();
+        this.fechaSolucion = new Date();
+        this.observacionInicial = '';
+      }
+
+}
+
 class Categoria{
 codigo: string;
 descripcion: string;
