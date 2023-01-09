@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Equipo } from 'src/app/core/GenericaInterfaz';
 import {
   Casos,
@@ -9,6 +9,7 @@ import { ServiceGenericService } from '../../../../core/ServiceGeneric.service';
 import { RespuestaGeneral } from '../../auth/login/model/Login';
 import { environment } from '../../../../../environments/environment.prod';
 import { timeStamp } from 'console';
+import { CasosMap } from '../../../../core/GenericaInterfaz';
 
 @Component({
   selector: 'app-nuevo',
@@ -16,8 +17,14 @@ import { timeStamp } from 'console';
   styleUrls: ['./nuevo.component.scss'],
 })
 export class NuevoComponent implements OnInit {
+
+  @Input() idCaso: string = '';
+  @Input() ver: boolean = false;
+  @Input() editar: boolean = false;
+
   caso: Casos = {
     equipoRelacionado: '',
+    fechaCreacionString:'',
     estadoCaso: '',
     fechaCreacion: new Date(),
     fechaSolucion: new Date(),
@@ -58,6 +65,8 @@ export class NuevoComponent implements OnInit {
     },
   ];
 
+  casoBd: CasosMap;
+
   equipoSeleccionado: EquipoInner = {
     nombre: '',
     imagenPrincipal: '',
@@ -93,12 +102,19 @@ export class NuevoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if (!this.ver) {
     this.listandoEquipos();
     this.nombreUsuarioLogado = this.genericService.armandoNombreCompleto();
 
     this.caso.usuarioReporta = JSON.parse(
       localStorage.getItem(environment.datosUsuario) || ''
     ).id;
+    }else{
+
+      this.mostrandoCaso();
+
+    }
+
   }
 
   listandoEquipos() {
@@ -108,6 +124,20 @@ export class NuevoComponent implements OnInit {
         console.log('res=> ', res);
 
         this.listaEquipos = res.body;
+        this.mostrarLoader = false;
+      });
+  }
+
+  mostrandoCaso() {
+    this.genericService
+      .buscarUnCasoConId(this.idCaso)
+      .subscribe((res: RespuestaGeneral<CasosMap>) => {
+        console.log('res=> id caso ', res);
+
+        this.casoBd = res.body;
+        this.nombreUsuarioLogado = this.casoBd.usuarioReportaNombreCompleto;
+        this.caso.observacionInicial = this.casoBd.observacionInicial;
+        this.casoBd.tecnicoAsignadoNombreCompleto= this.casoBd.tecnicoAsignadoNombreCompleto?? "No Asignado";
         this.mostrarLoader = false;
       });
   }
@@ -149,6 +179,7 @@ export class NuevoComponent implements OnInit {
   reiniciandoFormualrio() {
     this.caso = {
       equipoRelacionado: '',
+      fechaCreacionString:'',
       estadoCaso: '',
       fechaCreacion: new Date(),
       fechaSolucion: new Date(),

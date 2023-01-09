@@ -1,1 +1,132 @@
-<p>gestionar works!</p>
+<div class="animate__animated animate__fadeIn">
+  <div class="row mb-5 ">
+    <div class="col-md-12 stretch-card">
+      <div class="card">
+        <div class="card-body">
+
+         AQUI FILTROS FECHA Y ESTADO CASO
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+  <div class="row mt-5" class="row">
+    <div class="col-md-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h6 class="card-title">Total Casos registrados ({{ totalCasos }}) | Total Casos Reportados ({{ totalCasos
+            }}) | Total Casos Asignados ({{ totalCasos }}) </h6>
+          <div class="row" *ngIf="mostrarLoader">
+            <div class="col-md-12">
+
+              <div class="spinner-wrapper">
+
+                <div class="spinner"></div>
+              </div>
+
+
+
+            </div>
+          </div>
+          <div class="table-responsive pt-3 animate__animated animate__fadeIn" *ngIf="!mostrarLoader">
+            <table class="table table-bordered table-responsive" style="zoom: 95%;">
+              <thead>
+                <tr>
+                  <th>Fecha Creación</th>
+                  <th># Caso</th>
+                  <th>Estado Caso</th>
+                  <th>Equipo Relacionado</th>
+                  <th>Usuario Reporta</th>
+                  <th>Técnico Asignado</th>
+                  <th>Observación Inicial</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+
+              <tbody>
+
+                <tr *ngFor=" let caso of listaCasos">
+                  <td>{{ caso.fechaCreacionString }}</td>
+                  <td>{{ caso.numeroCaso }}</td>
+                  <td>{{ caso.estadoCasoDescripcion }}</td>
+                  <td>{{ caso.equipoRelacionado }}</td>
+                  <td>{{ caso.usuarioReportaNombreCompleto }}</td>
+                  <td>{{ !caso.tecnicoAsignadoNombreCompleto ? 'Sin Asignar': caso.tecnicoAsignadoNombreCompleto == ''? 'Sin Asignar':
+                    caso.tecnicoAsignadoNombreCompleto }}</td>
+                  <td>{{ caso.observacionInicial | slice: 0: 50 }}</td>
+
+                  <td>
+
+                    <!-- Mantenimiento -->
+                    <div class="row">
+
+
+
+                      <!-- Ver -->
+                      <div class="col-lg-6 text-center">
+
+                        <a (click)="openXlModalVer(xlModal,  caso.numeroCaso)" title="Ver detalle Caso"><i
+                            style="font-size: 20px; color: #318edf;" class="mdi mdi-eye animate-icon"></i></a>
+
+                      </div>
+
+                      <!-- Editar -->
+                      <div class="col-lg-6 text-center ">
+                        <a *ngIf="" (click)="openXlModalEditar(xlModal,  caso.numeroCaso)" title="Asignar Técnico"><i
+                            style="font-size: 20px; color: #0d9972;" class="mdi mdi-account-multiple-plus animate-icon"></i></a>
+
+                        <a *ngIf="" (click)="openXlModalEditar(xlModal,  caso.numeroCaso)" title="Asignar Técnico"><i
+                          style="font-size: 20px; color: #0d997127;" class="mdi mdi-account-multiple-plus animate-icon"></i></a>
+
+
+
+                      </div>
+
+
+
+
+
+                    </div>
+
+                  </td>
+                </tr>
+
+
+              </tbody>
+            </table>
+            <div class="row text-center mb-3 mt-3" style="width: 100%;" *ngIf="listaEquiposInner.length == 0">
+              <p>No se encontró data</p>
+
+            </div>
+
+
+          </div>
+          <button type="button" [disabled]="pagina==0" (click)="buscarPaginado(-1)"
+            class="btn btn-secondary mt-2">Anteriores</button>
+          &nbsp;
+          <button type="button" [disabled]="(pagina + 1 ) * 5 > totalCasos " (click)="buscarPaginado(1)"
+            class="btn btn-secondary mt-2">Siguentes</button>
+
+          <span style="float: right; margin-top: 10px; padding-right: 10px;">Página {{ pagina + 1 }}</span>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+
+<!-- Modal -->
+<ng-template #xlModal let-modal>
+  <div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLabel">{{ tituloModal}}</h5>
+    <button type="button" class="btn-close" (click)="modal.close('by: close icon')" aria-label="Close"></button>
+  </div>
+  <div class="modal-body">
+    <app-nuevo [idCaso]="idCaso" [ver]="verDetalles"></app-nuevo>
+  </div>
+
+</ng-template>

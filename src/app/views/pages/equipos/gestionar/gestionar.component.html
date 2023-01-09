@@ -107,8 +107,10 @@
           <button type="button" [disabled]="pagina==0" (click)="buscarPaginado(-1)"
             class="btn btn-secondary mt-2">Anteriores</button>
           &nbsp;
-          <button type="button" [disabled]="pagina * 5 > totalEquipos || nombreBusqueda.value != '' && desde < 10 " (click)="buscarPaginado(1)"
-            class="btn btn-secondary mt-2">Siguentes</button>
+
+
+            <button type="button" [disabled]="(pagina + 1 ) * 5 > totalEquipos " (click)="buscarPaginado(1)"
+              class="btn btn-secondary mt-2">Siguentes</button>
 
           <span style="float: right; margin-top: 10px; padding-right: 10px;">Página {{ pagina + 1 }}</span>
 

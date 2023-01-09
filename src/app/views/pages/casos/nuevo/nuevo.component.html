@@ -2,7 +2,8 @@
   <div class="row animate__animated animate__fadeIn">
     <div class="col-lg-12">
       <div class="card">
-        <h4 class="text-center mt-5">Registrando Nuevo Caso</h4>
+        <h4 *ngIf="!ver" class="text-center mt-5">Registrando Nuevo Caso</h4>
+        <h4 *ngIf="ver" class="text-center mt-5">Detalle Caso</h4>
 
         <div class="card-body">
 
@@ -32,43 +33,86 @@
                     </span>
                   </label>
 
-                  <input disabled="true" type="text" class="form-control" name="usuarioReporta" #requriedUsuarioReporta = "ngModel" [(ngModel)]="nombreUsuarioLogado" >
+                  <input disabled="true" type="text" class="form-control" name="usuarioReporta"
+                    #requriedUsuarioReporta="ngModel" [(ngModel)]="nombreUsuarioLogado">
 
 
 
 
                 </div>
 
+                <div class="col-md-12 mb-3" *ngIf="ver">
+                  <label for="exampleInputUsername1" class="form-label">Técnico Asignado
+                    <span class="text-danger mt-1" *ngIf="requriedtecnicoAsignado?.errors?.required">
+                      *
+                    </span>
+                  </label>
+
+                  <input disabled="true" type="text" class="form-control" name="tecnicoAsignado"
+                    #requriedtecnicoAsignado="ngModel" [(ngModel)]="casoBd.tecnicoAsignadoNombreCompleto">
+
+
+
+
+                </div>
+
+                <div class="col-md-12 mb-3" *ngIf="ver">
+                  <label for="exampleInputUsername1" class="form-label">Estado Caso
+                    <span class="text-danger mt-1" *ngIf="requriedestadoCasoDescripcion?.errors?.required">
+                      *
+                    </span>
+                  </label>
+
+                  <input disabled="true" type="text" class="form-control" name="estadoCasoDescripcion"
+                    #requriedestadoCasoDescripcion="ngModel" [(ngModel)]="casoBd.estadoCasoDescripcion">
+
+
+
+
+                </div>
+
+
                 <!--Equipo Relacionado -->
-                <div class="col-md-12 mb-3">
+                <div class="col-md-12 mb-3" *ngIf="!ver">
                   <label for="exampleInputUsername1" class="form-label">Seleccione el Equipo Relacionado
                     <span class="text-danger mt-1" *ngIf="requriedEquipoRelacionado?.errors?.required">
                       *
                     </span>
                   </label>
 
-                  <ng-select (change)="cambioEquipoRelacionado()" [items]="listaEquipos" [multiple]=false bindLabel="nombre" bindValue="id"
-                    [hideSelected]="true" [(ngModel)]="caso.equipoRelacionado" #requriedEquipoRelacionado="ngModel" name="equipoRelacionado">
+                  <ng-select (change)="cambioEquipoRelacionado()" [items]="listaEquipos" [multiple]=false
+                    bindLabel="nombre" bindValue="id" [hideSelected]="true" [(ngModel)]="caso.equipoRelacionado"
+                    #requriedEquipoRelacionado="ngModel" name="equipoRelacionado">
 
                     <ng-template ng-label-tmp let-item="item" let-clear="clear">
-                      <span class="ng-value-label"><img [src]="item.imagenPrincipal??'../../../../../assets/images/others/noImagen.png'" width="20px" height="20px">
+                      <span class="ng-value-label"><img
+                          [src]="item.imagenPrincipal??'../../../../../assets/images/others/noImagen.png'" width="20px"
+                          height="20px">
                         {{item.nombre }}</span>
                       <span class="ng-value-icon right" (click)="clear(item)" aria-hidden="true">×</span>
                     </ng-template>
 
                     <ng-template ng-option-tmp let-item="item">
-                      <img [src]="item.imagenPrincipal??'../../../../../assets/images/others/noImagen.png'" width="20px" height="20px"> {{item.codigo +" | "+ item.nombre }}
+                      <img [src]="item.imagenPrincipal??'../../../../../assets/images/others/noImagen.png'" width="20px"
+                        height="20px"> {{item.codigo +" | "+ item.nombre }}
                     </ng-template>
 
                   </ng-select>
                   <div class="mt-2" *ngIf="caso.equipoRelacionado && caso.equipoRelacionado != ''">
                     <p class="text-muted" style="font-size: 10px;">Equipo en Falla Seleccionado:</p>
                     <ul>
-                      <span  style="font-size: 10px;" >COD: {{ equipoSeleccionado.codigo }} | Nombre: {{ equipoSeleccionado.nombre }} </span>
+                      <span style="font-size: 10px;">COD: {{ equipoSeleccionado.codigo }} | Nombre: {{
+                        equipoSeleccionado.nombre }} </span>
                     </ul>
                   </div>
 
 
+                </div>
+
+                <div class="col-md-12 mb-3" *ngIf="ver">
+                  <label for="equipoRelacionadoDetalle">Equipo Relacionado</label>
+                  <input id="equipoRelacionadoDetalle" disabled="true" type="text" class="form-control"
+                    [value]="casoBd.equipoRelacionado">
                 </div>
 
                 <div class="mb-3">
@@ -76,8 +120,9 @@
                       *ngIf="requriedObservacionInicial?.errors?.required">
                       *
                     </span></label>
-                  <textarea class="form-control" [(ngModel)]="caso.observacionInicial" name="observacionInicial"
-                    placeholder="Descripción del Equipo" rows="3" #requriedObservacionInicial="ngModel" required></textarea>
+                  <textarea [disabled]="ver" class="form-control" [(ngModel)]="caso.observacionInicial"
+                    name="observacionInicial" placeholder="Descripción del Equipo" rows="3"
+                    #requriedObservacionInicial="ngModel" required></textarea>
                 </div>
 
               </div>
@@ -89,7 +134,11 @@
             <!-- Segunda Columna de las imagenes -->
             <div *ngIf="!mostrarLoader" class="col-md-6 text-center animate__animated animate__fadeIn">
 
-              <img style="width: 50%;" [src]="equipoSeleccionado.imagenPrincipal!= null && equipoSeleccionado.imagenPrincipal != '' ? equipoSeleccionado.imagenPrincipal:'../../../../../assets/images/others/noImagen.png'">
+              <img *ngIf="!ver" style="width: 50%;"
+                [src]="equipoSeleccionado.imagenPrincipal!= null && equipoSeleccionado.imagenPrincipal != '' ? equipoSeleccionado.imagenPrincipal:'../../../../../assets/images/others/noImagen.png'">
+
+                <img *ngIf="ver" style="width: 50%; margin-top: 100px;"
+                [src]="equipoSeleccionado.imagenPrincipal!= null && equipoSeleccionado.imagenPrincipal != '' ? equipoSeleccionado.imagenPrincipal:'../../../../../assets/images/others/noImagen.png'">
 
             </div>
           </div>
@@ -97,7 +146,8 @@
 
 
           <div style="text-align: center; margin-top: 50px;" class=" animate__animated animate__fadeIn">
-            <button (click)="guardar()" *ngIf="!mostrarLoader" style="width: 200px;" type="button" class="btn btn-primary">Crear Caso</button>
+            <button (click)="guardar()" *ngIf="!mostrarLoader" style="width: 200px;" type="button"
+              class="btn btn-primary">Crear Caso</button>
 
           </div>
 

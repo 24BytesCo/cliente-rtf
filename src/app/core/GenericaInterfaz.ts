@@ -52,6 +52,7 @@ export class Casos{
   equipoRelacionado: string;
   usuarioReporta: string;
   fechaCreacion: Date;
+  fechaCreacionString: string;
   fechaSolucion?: Date;
   observacionInicial: string;
 
@@ -61,8 +62,40 @@ export class Casos{
         this.tecnicoAsignado = '';
         this.equipoRelacionado = '';
         this.usuarioReporta = '';
+        this.fechaCreacionString = '';
         this.fechaCreacion = new Date();
         this.fechaSolucion = new Date();
+        this.observacionInicial = '';
+      }
+
+}
+
+
+export class CasosMap{
+
+  numeroCaso: string;
+  estadoCasoCode: string;
+  estadoCasoDescripcion: string;
+  tecnicoAsignadoNombreCompleto: string;
+  tecnicoAsignadoId: string;
+  usuarioReportaNombreCompleto: string;
+  usuarioReportaId: string;
+  equipoRelacionado: string;
+  fechaCreacionString: string;
+  observacionInicial: string;
+
+
+
+      constructor(){
+        this.numeroCaso = '';
+        this.estadoCasoCode = '';
+        this.estadoCasoDescripcion = '';
+        this.tecnicoAsignadoNombreCompleto = '';
+        this.tecnicoAsignadoId = '';
+        this.usuarioReportaNombreCompleto = '';
+        this.usuarioReportaId = '';
+        this.equipoRelacionado = '';
+        this.fechaCreacionString = '';
         this.observacionInicial = '';
       }
 

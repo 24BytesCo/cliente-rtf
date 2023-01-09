@@ -14,7 +14,7 @@ import {
 import { environment } from 'src/environments/environment.prod';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { LoaderService } from './loader.service';
-import { EquipoInner, Casos } from './GenericaInterfaz';
+import { EquipoInner, Casos, CasosMap } from './GenericaInterfaz';
 import {
   UsuarioToken,
   TipoEquipo,
@@ -25,6 +25,7 @@ import {
   providedIn: 'root',
 })
 export class ServiceGenericService {
+
   private horaServer: Date;
   public cerrarSesion: boolean = false;
 
@@ -417,6 +418,36 @@ export class ServiceGenericService {
       );
   }
 
+  listandoCasosInnerActivos(
+    desde: number,
+    nombre: any,
+    cantidadPorPagina: number
+  ) {
+    const token = localStorage.getItem(environment.token);
+
+    if (nombre == '') {
+      nombre = null;
+    }
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .get<RespuestaGeneral<CasosMap[]>>(
+        `${environment.urlApi}caso?desdeRegistro=${desde}&cantidadPorPagina=${cantidadPorPagina}&nombre=${nombre}`,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
   buscarUnEquipoConId(idEquipo: string) {
     const token = localStorage.getItem(environment.token);
 
@@ -440,6 +471,29 @@ export class ServiceGenericService {
       );
   }
 
+  buscarUnCasoConId(idEquipo: string) {
+    const token = localStorage.getItem(environment.token);
+
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .get<RespuestaGeneral<CasosMap>>(
+        `${environment.urlApi}caso/${idEquipo}`,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
   contandoEquiposActivos() {
     const token = localStorage.getItem(environment.token);
     var httpOptions = {
@@ -451,6 +505,28 @@ export class ServiceGenericService {
     return this.http
       .get<RespuestaGeneral<EquipoInner[]>>(
         `${environment.urlApi}equipo/total-activos`,
+        httpOptions
+      )
+      .pipe(
+        retry(0),
+        catchError(this.handleError),
+        map((response: any) => {
+          return response;
+        })
+      );
+  }
+
+  contandoCasosActivos() {
+    const token = localStorage.getItem(environment.token);
+    var httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + token,
+      }),
+    };
+    return this.http
+      .get<RespuestaGeneral<EquipoInner[]>>(
+        `${environment.urlApi}caso/total-activos`,
         httpOptions
       )
       .pipe(
